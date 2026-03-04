@@ -12,6 +12,7 @@ class MangaRepository {
       isBookmarked: true,
       coverPage: "assets/images/Umamusume_Star_Blossom.jpg",
       chapter: "CH1_UMAMUSUME_STAR_BLOSSOM.pdf",
+      genres: ["Action", "Sports", "Drama"],
     ),
     Manga(
       title: "Shin Ootaka, Homare",
@@ -22,6 +23,7 @@ class MangaRepository {
       status: "Planning",
       coverPage: "assets/images/Shin_Ootaka_Homare.jpg",
       chapter: "SHIN_OOTAKA.pdf",
+      genres: ["Drama", "Slice of Life"],
     ),
     Manga(
       title: "Oshi no Ko",
@@ -32,6 +34,7 @@ class MangaRepository {
       status: "Ongoing",
       coverPage: "assets/images/Oshi no Ko.jpg",
       chapter: "OSHINOKO_CH1.pdf",
+      genres: ["Drama", "Mystery", "Supernatural"],
     ),
     Manga(
       title: "Uma Musume: Cinderella Gray",
@@ -42,6 +45,7 @@ class MangaRepository {
       status: "Reading",
       coverPage: "assets/images/Umamusume_Cinderella_Gray.jpg",
       chapter: "CINDERELLA_GRAY_CH1.pdf",
+      genres: ["Action", "Sports"],
     ),
     Manga(
       title: "Jujutsu Kaisen",
@@ -52,6 +56,7 @@ class MangaRepository {
       status: "Completed",
       coverPage: "assets/images/JJK.jpg",
       chapter: "JJK_CH1.pdf",
+      genres: ["Action", "Supernatural", "Thriller"],
     ),
     Manga(
       title: "DanDaDan",
@@ -62,6 +67,7 @@ class MangaRepository {
       status: "Ongoing",
       coverPage: "assets/images/Dandadan.jpg",
       chapter: "DANDADAN_CH1.pdf",
+      genres: ["Action", "Comedy", "Sci-Fi", "Supernatural"],
     ),
     Manga(
       title: "One Piece",
@@ -72,6 +78,7 @@ class MangaRepository {
       status: "Ongoing",
       coverPage: "assets/images/One_Piece.jpg",
       chapter: "ONE_PIECE_CH1.pdf",
+      genres: ["Action", "Adventure", "Comedy", "Fantasy"],
     ),
   ];
 

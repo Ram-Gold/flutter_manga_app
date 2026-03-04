@@ -13,21 +13,27 @@ class MainWrapper extends StatefulWidget {
 class _MainWrapperState extends State<MainWrapper> {
   int _selectedIndex = 0;
 
-  final List<Widget> screens = [
-    const BrowserScreen(),
-    LibraryManga(), // Siguraduhin na ang constructor ay tumatanggap ng walang parameters
-     SearchManga(),
-  ];
+  void _onTabTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      const BrowserScreen(),
+      const LibraryManga(),
+      const SearchManga(),
+    ];
+
     return Scaffold(
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // <--- ITO ANG KAILANGAN PARA HINDI MAG-ERROR
+        type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        backgroundColor: const Color(0xFF0F0F1A), // Matches your other screens
+        onTap: _onTabTapped,
+        backgroundColor: const Color(0xFF0F0F1A),
         selectedItemColor: Colors.orangeAccent,
         unselectedItemColor: Colors.grey,
         showSelectedLabels: false,
