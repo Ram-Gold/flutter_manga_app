@@ -58,7 +58,7 @@ class _AddEditMangaScreenState extends State<AddEditMangaScreen> {
   Future<void> _pickChapter() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
     );
     if (result != null) {
       setState(() {
@@ -118,7 +118,7 @@ class _AddEditMangaScreenState extends State<AddEditMangaScreen> {
               _buildTextField(_genresController, 'Genres (comma separated)'),
               const SizedBox(height: 20),
               ListTile(
-                title: Text('Chapter (PDF)', style: GoogleFonts.montserrat()),
+                title: Text('Chapter (PDF/Image)', style: GoogleFonts.montserrat()),
                 subtitle: Text(_chapterPath ?? 'No file selected', style: GoogleFonts.karla()),
                 trailing: IconButton(
                   icon: const Icon(Icons.attach_file),

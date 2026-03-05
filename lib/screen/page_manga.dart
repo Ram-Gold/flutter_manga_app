@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:pdfrx/pdfrx.dart';
 import '../models/manga.dart';
 
 class PageManga extends StatelessWidget {
@@ -8,30 +10,32 @@ class PageManga extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isAsset = manga.chapter.startsWith('assets/');
+    final isPdf = manga.chapter.toLowerCase().endsWith('.pdf');
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(manga.title),
         backgroundColor: const Color(0xFF0F0F1A),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.picture_as_pdf, size: 100, color: Colors.red),
-            const SizedBox(height: 20),
-            Text(
-              "Reading: ${manga.chapter}",
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+      body: isPdf
+          ? (isAsset
+              ? PdfViewer.asset(manga.chapter)
+              : PdfViewer.file(manga.chapter))
+          : SingleChildScrollView(
+              child: isAsset
+                  ? Image.asset(
+                      manga.chapter,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                    )
+                  : Image.file(
+                      File(manga.chapter),
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                    ),
             ),
-            const SizedBox(height: 10),
-            const Text(
-              "(PDF Viewer Placeholder)",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

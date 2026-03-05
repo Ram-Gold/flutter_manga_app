@@ -20,9 +20,17 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 10,
       onCreate: _createDB,
+      onUpgrade: _onUpgrade,
     );
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 10) {
+      await db.execute('DROP TABLE IF EXISTS manga');
+      await _createDB(db, newVersion);
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -52,8 +60,8 @@ class DatabaseHelper {
         favorites: "5,654",
         status: "Ongoing",
         isBookmarked: true,
-        coverPage: "assets/images/Umamusume_Star_Blossom.jpg",
-        chapter: "CH1_UMAMUSUME_STAR_BLOSSOM.pdf",
+        coverPage: "assets/images/umamusume_star_blossom.jpg",
+        chapter: "assets/chapters/ch1_umamusume_star_blossom.jpeg",
         genres: ["Action", "Sports", "Drama"],
       ),
        Manga(
@@ -63,63 +71,63 @@ class DatabaseHelper {
         rating: "8.50",
         favorites: "1,234",
         status: "Hiatus",
-        coverPage: "assets/images/Idolatry.jpg",
-        chapter: "SHIN_OOTAKA.pdf",
+        coverPage: "assets/images/idolatry.jpg",
+        chapter: "assets/chapters/ch1_idolatry.png",
         genres: ["Drama", "Slice of Life"],
       ),
       Manga(
         title: "Oshi no Ko",
-        description: "Description for Oshi no Ko.",
+        description: "The story begins with a beautiful girl, her perfectly fake smile, and the people who love her selfishly for it. What transpires behind the scenes of the glittering showbiz industry? How far would you go for the sake of your beloved idol? What would you do if you found out reincarnation was real? The star of the show is Aquamarine Hoshino and the stage is but a mere facade. Will he manage to reach the climax before the world of glamour swallows him whole?",
         authors: "Akasaka Aka, Yokoyari Mengo",
         rating: "9.00",
         favorites: "10,000",
         status: "Ongoing",
-        coverPage: "assets/images/Oshi no Ko.jpg",
-        chapter: "OSHINOKO_CH1.pdf",
+        coverPage: "assets/images/oshi_no_ko.jpg",
+        chapter: "assets/chapters/ch1_oshi_no_ko.pdf",
         genres: ["Drama", "Mystery", "Supernatural"],
       ),
       Manga(
         title: "Uma Musume: Cinderella Gray",
-        description: "Description for Cinderella Gray.",
+        description: "Uma Musume: Cinderella Gray is a spin-off title of the Uma Musume project by Cygames. It follows Oguri Cap through her time at Kasamatsu Training Center Academy and on her journey of becoming a legendary horse girl.",
         authors: "Sugiura Masafumi, Itou Junnousuke, Kuzumi Taiyou",
         rating: "8.80",
         favorites: "4,500",
         status: "Ongoing",
-        coverPage: "assets/images/Umamusume_Cinderella_Gray.jpg",
-        chapter: "CINDERELLA_GRAY_CH1.pdf",
+        coverPage: "assets/images/umamusume_cinderella_gray.jpg",
+        chapter: "assets/chapters/ch1_umamusume_cinderella_gray.jpeg",
         genres: ["Action", "Sports"],
       ),
       Manga(
         title: "Jujutsu Kaisen",
-        description: "Description for JJK.",
+        description: "For some strange reason, Itadori Yuuji, despite his insane athleticism, would rather just hang out with the Occult Club. However, he soon finds out that the occult is as real as it gets when his fellow club members are attacked! Meanwhile, the mysterious Fushiguro Megumi is tracking down a special-grade cursed object, and his search leads him to Itadori…",
         authors: "Gege Akutami",
         rating: "9.20",
         favorites: "25,000",
         status: "Completed",
-        coverPage: "assets/images/JJK.jpg",
-        chapter: "JJK_CH1.pdf",
+        coverPage: "assets/images/jjk.jpg",
+        chapter: "assets/chapters/ch1_jjk.pdf",
         genres: ["Action", "Supernatural", "Thriller"],
       ),
       Manga(
         title: "DanDaDan",
-        description: "Description for DanDaDan.",
+        description: "After being aggressively rejected, Momo Ayase finds herself sulking when she stumbles across a boy being bullied. Saved by her rash kindness, the occult-obsessed boy attempts to speak to her about supernatural interests he believes they share. Rejecting his claims, Ayase proclaimed that she is instead a believer in ghosts, starting an argument between the two over which is real. In a bet to determine who's correct, the two decide to separately visit locations associated with both the occult and the supernatural—Ayase visiting the former and the boy visiting the latter. When the two reach their respective places, it turns out that neither of them was wrong and that both the occult and ghosts do exist. This marks the beginning of Ayase and the boy's adventure, who shares a name with Ayase's favorite idol—Ken Takakura, as they attempt to fix the surreal supernatural and sci-fi elements around them to return to a normal life..",
         authors: "Yukinobu Tatsu",
         rating: "8.70",
         favorites: "8,000",
         status: "Ongoing",
-        coverPage: "assets/images/Dandadan.jpg",
-        chapter: "DANDADAN_CH1.pdf",
+        coverPage: "assets/images/dandadan.jpg",
+        chapter: "assets/chapters/ch1_dandadan.pdf",
         genres: ["Action", "Comedy", "Sci-Fi", "Supernatural"],
       ),
       Manga(
         title: "One Piece",
-        description: "Description for One Piece.",
+        description: """Gol D. Roger, a man referred to as the "Pirate King," is set to be executed by the World Government. But just before his demise, he confirms the existence of a great treasure, One Piece, located somewhere within the vast ocean known as the Grand Line. Announcing that One Piece can be claimed by anyone worthy enough to reach it, the Pirate King is executed and the Great Age of Pirates begins. Twenty-two years later, a young man by the name of Monkey D. Luffy is ready to embark on his own adventure, searching for One Piece and striving to become the new Pirate King. Armed with just a straw hat, a small boat, and an elastic body, he sets out on a fantastic journey to gather his own crew and a worthy ship that will take them across the Grand Line to claim the greatest status on the high seas.""",
         authors: "Eiichiro Oda",
         rating: "9.99",
         favorites: "100,000",
         status: "Ongoing",
-        coverPage: "assets/images/One_Piece.jpg",
-        chapter: "ONE_PIECE_CH1.pdf",
+        coverPage: "assets/images/one_piece.jpg",
+        chapter: "assets/chapters/ch1_one_piece.pdf",
         genres: ["Action", "Adventure", "Comedy", "Fantasy"],
       ),
     ];

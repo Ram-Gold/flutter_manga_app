@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import '../models/manga.dart';
 import '../data/database_helper.dart';
 import '../providers/theme_provider.dart';
