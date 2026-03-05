@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/manga.dart';
 import '../data/database_helper.dart';
 import 'info_manga.dart';
@@ -35,17 +36,16 @@ class _SearchMangaState extends State<SearchManga> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Search',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
                       color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 20),
 
-                  // Enhanced Search Bar to match BrowserScreen exactly
                   Container(
                     height: 52,
                     decoration: BoxDecoration(
@@ -55,18 +55,18 @@ class _SearchMangaState extends State<SearchManga> {
                     child: TextField(
                       onChanged: _onSearchChanged,
                       autofocus: true,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                      cursorColor: Colors.orangeAccent,
-                      decoration: const InputDecoration(
+                      style: GoogleFonts.karla(color: Colors.white, fontSize: 16),
+                      cursorColor: const Color(0xFFFF8A71),
+                      decoration: InputDecoration(
                         hintText: 'Search Manga',
-                        hintStyle: TextStyle(color: Color(0xFFA6A6BB), fontSize: 16),
-                        prefixIcon: Padding(
+                        hintStyle: GoogleFonts.karla(color: const Color(0xFFA6A6BB), fontSize: 16),
+                        prefixIcon: const Padding(
                           padding: EdgeInsets.only(left: 16, right: 12),
                           child: Icon(Icons.search, color: Color(0xFFA6A6BB)),
                         ),
-                        prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 15),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 15),
                       ),
                     ),
                   ),
@@ -80,22 +80,22 @@ class _SearchMangaState extends State<SearchManga> {
                 child: Column(
                   children: [
                     if (_query.isEmpty)
-                      const Center(
+                      Center(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 40),
+                          padding: const EdgeInsets.only(top: 40),
                           child: Text(
                             "Start typing to search manga...",
-                            style: TextStyle(color: Color(0xFFA6A6BB), fontSize: 16),
+                            style: GoogleFonts.karla(color: const Color(0xFFA6A6BB), fontSize: 16),
                           ),
                         ),
                       )
                     else if (_searchResults.isEmpty)
-                      const Center(
+                      Center(
                         child: Padding(
-                          padding: EdgeInsets.only(top: 40),
+                          padding: const EdgeInsets.only(top: 40),
                           child: Text(
                             "No manga found.",
-                            style: TextStyle(color: Color(0xFFA6A6BB), fontSize: 16),
+                            style: GoogleFonts.karla(color: const Color(0xFFA6A6BB), fontSize: 16),
                           ),
                         ),
                       )
@@ -108,7 +108,7 @@ class _SearchMangaState extends State<SearchManga> {
                           crossAxisCount: 3,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 18,
-                          childAspectRatio: 0.55,
+                          childAspectRatio: 0.52,
                         ),
                         itemBuilder: (context, index) {
                           final manga = _searchResults[index];
@@ -139,25 +139,35 @@ class _SearchMangaState extends State<SearchManga> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+          AspectRatio(
+            aspectRatio: 2 / 3,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(8),
               child: Image.asset(
                 manga.coverPage,
                 fit: BoxFit.cover,
-                width: double.infinity,
               ),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             manga.title,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            style: GoogleFonts.montserrat(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
-            maxLines: 2,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            manga.authors,
+            style: GoogleFonts.karla(
+              fontSize: 13,
+              fontWeight: FontWeight.w300,
+              color: const Color(0xFFA6A6BB),
+            ),
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ],

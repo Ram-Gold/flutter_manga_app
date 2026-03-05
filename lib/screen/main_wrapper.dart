@@ -42,14 +42,26 @@ class _MainWrapperState extends State<MainWrapper> {
         currentIndex: _selectedIndex,
         onTap: _onTabTapped,
         backgroundColor: const Color(0xFF0F0F1A),
-        selectedItemColor: Colors.orangeAccent,
+        selectedItemColor: const Color(0xFFFF8A71), // Match Start Reading button color
         unselectedItemColor: Colors.grey,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'Browse'),
-          BottomNavigationBarItem(icon: Icon(Icons.book_outlined), label: 'Library'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grid_view_rounded),
+            activeIcon: Icon(Icons.grid_view_rounded),
+            label: 'Browse'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark_outline), 
+            activeIcon: Icon(Icons.bookmark),
+            label: 'Library'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search), 
+            activeIcon: Icon(Icons.search),
+            label: 'Search'
+          ),
         ],
       ),
     );

@@ -15,6 +15,7 @@ dependencies:
   sqflite_common_ffi: ^2.3.0+2
   path: ^1.8.3
   provider: ^6.1.1
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,4 @@ flutter:
     - assets/images/JJK.jpg
     - assets/images/Dandadan.jpg
     - assets/images/One_Piece.jpg
+    - assets/images/Oshi_no_ko.jpg

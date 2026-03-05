@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../providers/manga_provider.dart';
 import 'info_manga.dart';
 import 'main_wrapper.dart';
@@ -33,11 +34,11 @@ class _BrowserScreenState extends State<BrowserScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Browse',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.montserrat(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
               ),
@@ -60,15 +61,18 @@ class _BrowserScreenState extends State<BrowserScreen> {
                     color: const Color(0xFF1C1C2A),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Icon(Icons.search, color: Color(0xFFA6A6BB)),
                       ),
                       Text(
                         'Search Manga',
-                        style: TextStyle(color: Color(0xFFA6A6BB), fontSize: 16),
+                        style: GoogleFonts.karla(
+                          color: const Color(0xFFA6A6BB),
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
@@ -76,10 +80,10 @@ class _BrowserScreenState extends State<BrowserScreen> {
               ),
               const SizedBox(height: 30),
 
-              const Text(
+              Text(
                 'Genre',
-                style: TextStyle(
-                  fontSize: 22,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -91,24 +95,17 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildCustomChip('All'),
-                    _buildCustomChip('Action'),
-                    _buildCustomChip('Romance'),
-                    _buildCustomChip('Sci-Fi'),
-                    _buildCustomChip('Mystery'),
-                    _buildCustomChip('Thriller'),
-                    _buildCustomChip('Supernatural'),
-                    _buildCustomChip('Comedy'),
-                    _buildCustomChip('Music'),
-                  ],
+                    'All', 'Action', 'Romance', 'Sci-Fi', 'Mystery', 
+                    'Thriller', 'Supernatural', 'Comedy', 'Music'
+                  ].map((genre) => _buildCustomChip(genre)).toList(),
                 ),
               ),
               const SizedBox(height: 30),
 
-              const Text(
+              Text(
                 "Recommended for You",
-                style: TextStyle(
-                  fontSize: 22,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -116,12 +113,12 @@ class _BrowserScreenState extends State<BrowserScreen> {
               const SizedBox(height: 15),
 
               if (mangaList.isEmpty)
-                const Center(
+                Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40),
+                    padding: const EdgeInsets.symmetric(vertical: 40),
                     child: Text(
                       'No manga found for this genre.',
-                      style: TextStyle(color: Colors.grey),
+                      style: GoogleFonts.karla(color: Colors.grey),
                     ),
                   ),
                 )
@@ -140,10 +137,10 @@ class _BrowserScreenState extends State<BrowserScreen> {
 
               const SizedBox(height: 30),
 
-              const Text(
+              Text(
                 "Recently Added",
-                style: TextStyle(
-                  fontSize: 22,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -151,12 +148,12 @@ class _BrowserScreenState extends State<BrowserScreen> {
               const SizedBox(height: 15),
 
               if (recentlyAdded.isEmpty)
-                const Center(
+                Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 40),
+                    padding: const EdgeInsets.symmetric(vertical: 40),
                     child: Text(
                       'No recently added manga for this genre.',
-                      style: TextStyle(color: Colors.grey),
+                      style: GoogleFonts.karla(color: Colors.grey),
                     ),
                   ),
                 )
@@ -197,9 +194,10 @@ class _BrowserScreenState extends State<BrowserScreen> {
         child: Center(
           child: Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.montserrat(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
               color: isSelected ? Colors.white : const Color(0xFFA6A6BB),
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -234,12 +232,22 @@ class _BrowserScreenState extends State<BrowserScreen> {
             const SizedBox(height: 8),
             Text(
               manga.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              style: GoogleFonts.montserrat(
+                fontSize: 16,
+                fontWeight: FontWeight.bold, 
+                color: Colors.white
+              ),
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
             Text(
               manga.authors,
-              style: const TextStyle(color: Color(0xFFA6A6BB)),
+              style: GoogleFonts.karla(
+                fontSize: 13,
+                fontWeight: FontWeight.w300,
+                color: const Color(0xFFA6A6BB)
+              ),
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ],

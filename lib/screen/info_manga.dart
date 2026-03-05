@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/manga.dart';
 import '../providers/manga_provider.dart';
 import 'page_manga.dart';
@@ -58,8 +59,8 @@ class _InfoMangaState extends State<InfoManga> {
                     Text(
                       widget.manga.title,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 24,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -70,9 +71,10 @@ class _InfoMangaState extends State<InfoManga> {
                     Text(
                       widget.manga.authors,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFFA6A6BB),
+                      style: GoogleFonts.karla(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w300,
+                        color: const Color(0xFFA6A6BB),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -91,7 +93,11 @@ class _InfoMangaState extends State<InfoManga> {
                         ),
                         child: Text(
                           genre,
-                          style: const TextStyle(color: Color(0xFFA6A6BB), fontSize: 12),
+                          style: GoogleFonts.montserrat(
+                            color: const Color(0xFFA6A6BB), 
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       )).toList(),
                     ),
@@ -114,8 +120,8 @@ class _InfoMangaState extends State<InfoManga> {
                               const SizedBox(width: 8),
                               Text(
                                 widget.manga.rating,
-                                style: const TextStyle(
-                                  color: Color(0xFFFF7F5C),
+                                style: GoogleFonts.montserrat(
+                                  color: const Color(0xFFFF7F5C),
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -135,7 +141,7 @@ class _InfoMangaState extends State<InfoManga> {
                               const SizedBox(width: 8),
                               Text(
                                 widget.manga.favorites,
-                                style: const TextStyle(
+                                style: GoogleFonts.montserrat(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -149,12 +155,12 @@ class _InfoMangaState extends State<InfoManga> {
                     const SizedBox(height: 30),
 
                     // Description Label
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Description",
-                        style: TextStyle(
-                          fontSize: 20,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -165,8 +171,9 @@ class _InfoMangaState extends State<InfoManga> {
                     // Description Text
                     Text(
                       widget.manga.description,
-                      style: const TextStyle(
-                        fontSize: 15,
+                      style: GoogleFonts.karla(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
                         color: Colors.white70,
                         height: 1.5,
                       ),
@@ -221,10 +228,10 @@ class _InfoMangaState extends State<InfoManga> {
                     color: const Color(0xFFFF8A71),
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Start Reading",
-                      style: TextStyle(
+                      style: GoogleFonts.montserrat(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
