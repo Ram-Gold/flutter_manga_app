@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/manga.dart';
-import '../data/database_helper.dart';
+import '../providers/manga_provider.dart';
 import 'page_manga.dart';
 
 class InfoManga extends StatefulWidget {
@@ -15,6 +16,8 @@ class InfoManga extends StatefulWidget {
 class _InfoMangaState extends State<InfoManga> {
   @override
   Widget build(BuildContext context) {
+    final mangaProvider = Provider.of<MangaProvider>(context, listen: false);
+    
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F1A),
       body: SafeArea(
@@ -185,10 +188,8 @@ class _InfoMangaState extends State<InfoManga> {
             // Bookmark Button
             GestureDetector(
               onTap: () async {
-                setState(() {
-                  widget.manga.isBookmarked = !widget.manga.isBookmarked;
-                });
-                await DatabaseHelper.instance.update(widget.manga);
+                await mangaProvider.toggleBookmark(widget.manga);
+                setState(() {});
               },
               child: Container(
                 padding: const EdgeInsets.all(16),

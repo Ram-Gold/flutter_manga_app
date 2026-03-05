@@ -4,14 +4,21 @@ import 'library_manga.dart';
 import 'search_manga.dart';
 
 class MainWrapper extends StatefulWidget {
-  const MainWrapper({super.key});
+  final int initialIndex;
+  const MainWrapper({super.key, this.initialIndex = 0});
 
   @override
   State<MainWrapper> createState() => _MainWrapperState();
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -21,14 +28,15 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> screens = [
-      const BrowserScreen(),
-      const LibraryManga(),
-      const SearchManga(),
-    ];
-
     return Scaffold(
-      body: screens[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: const [
+          BrowserScreen(),
+          LibraryManga(),
+          SearchManga(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
