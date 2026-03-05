@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/manga.dart';
 import '../providers/manga_provider.dart';
+import '../providers/theme_provider.dart';
 import 'page_manga.dart';
+import 'add_edit_manga.dart';
 
 class InfoManga extends StatefulWidget {
   final Manga manga;
@@ -15,23 +18,83 @@ class InfoManga extends StatefulWidget {
 }
 
 class _InfoMangaState extends State<InfoManga> {
+  void _deleteManga() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Manga", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold)),
+          content: Text("Are you sure you want to delete this manga?", style: GoogleFonts.karla()),
+          actions: [
+            TextButton(
+              child: Text("Cancel", style: GoogleFonts.karla(color: Colors.grey)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text("Delete", style: GoogleFonts.karla(color: Colors.red)),
+              onPressed: () {
+                Provider.of<MangaProvider>(context, listen: false).deleteManga(widget.manga.id!);
+                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop(); // Go back to previous screen
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final mangaProvider = Provider.of<MangaProvider>(context, listen: false);
+    final mangaProvider = Provider.of<MangaProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeColors = Theme.of(context).extension<MangaThemeColors>()!;
     
+    // Find the latest manga data from provider in case it was edited
+    Manga currentManga;
+    try {
+      currentManga = mangaProvider.allManga.firstWhere(
+        (m) => m.id == widget.manga.id
+      );
+    } catch (e) {
+      // If manga was deleted, just use the passed one for the final frame before pop
+      currentManga = widget.manga;
+    }
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1A),
       body: SafeArea(
         child: Column(
           children: [
-            // Top Bar with Back Button
+            // Top Bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                    icon: Icon(Icons.arrow_back_ios_new, color: themeColors.headingTitle),
                     onPressed: () => Navigator.pop(context),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode, color: themeColors.headingTitle),
+                        onPressed: () => themeProvider.toggleTheme(),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit, color: themeColors.headingTitle),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddEditMangaScreen(manga: currentManga),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                        onPressed: _deleteManga,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -46,35 +109,32 @@ class _InfoMangaState extends State<InfoManga> {
                     // Manga Cover
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        widget.manga.coverPage,
-                        height: 320,
-                        width: 220,
-                        fit: BoxFit.cover,
-                      ),
+                      child: currentManga.coverPage.startsWith('assets/')
+                        ? Image.asset(currentManga.coverPage, height: 320, width: 220, fit: BoxFit.cover)
+                        : Image.file(File(currentManga.coverPage), height: 320, width: 220, fit: BoxFit.cover),
                     ),
                     const SizedBox(height: 24),
 
                     // Title
                     Text(
-                      widget.manga.title,
+                      currentManga.title,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: themeColors.headingTitle,
                       ),
                     ),
                     const SizedBox(height: 8),
 
                     // Authors
                     Text(
-                      widget.manga.authors,
+                      currentManga.authors,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.karla(
                         fontSize: 13,
                         fontWeight: FontWeight.w300,
-                        color: const Color(0xFFA6A6BB),
+                        color: themeColors.searchBarPlaceholder,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -84,17 +144,17 @@ class _InfoMangaState extends State<InfoManga> {
                       spacing: 8,
                       runSpacing: 8,
                       alignment: WrapAlignment.center,
-                      children: widget.manga.genres.map((genre) => Container(
+                      children: currentManga.genres.map((genre) => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1C1C2A),
+                          color: themeColors.genrePillBg,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white10),
                         ),
                         child: Text(
                           genre,
                           style: GoogleFonts.montserrat(
-                            color: const Color(0xFFA6A6BB), 
+                            color: themeColors.genrePillText, 
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
@@ -107,19 +167,18 @@ class _InfoMangaState extends State<InfoManga> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1C1C2A),
+                        color: themeColors.searchBarBg,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // Rating
                           Row(
                             children: [
                               const Icon(Icons.star_border, color: Color(0xFFFF7F5C)),
                               const SizedBox(width: 8),
                               Text(
-                                widget.manga.rating,
+                                currentManga.rating,
                                 style: GoogleFonts.montserrat(
                                   color: const Color(0xFFFF7F5C),
                                   fontSize: 18,
@@ -128,21 +187,19 @@ class _InfoMangaState extends State<InfoManga> {
                               ),
                             ],
                           ),
-                          // Divider
                           Container(
                             height: 30,
                             width: 1,
                             color: Colors.white24,
                           ),
-                          // Favorites
                           Row(
                             children: [
-                              const Icon(Icons.bookmark_outline, color: Colors.white70),
+                              Icon(Icons.bookmark_outline, color: themeColors.headingTitle!.withOpacity(0.7)),
                               const SizedBox(width: 8),
                               Text(
-                                widget.manga.favorites,
+                                currentManga.favorites,
                                 style: GoogleFonts.montserrat(
-                                  color: Colors.white,
+                                  color: themeColors.headingTitle,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -154,7 +211,6 @@ class _InfoMangaState extends State<InfoManga> {
                     ),
                     const SizedBox(height: 30),
 
-                    // Description Label
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -162,23 +218,22 @@ class _InfoMangaState extends State<InfoManga> {
                         style: GoogleFonts.montserrat(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: themeColors.headingTitle,
                         ),
                       ),
                     ),
                     const SizedBox(height: 12),
 
-                    // Description Text
                     Text(
-                      widget.manga.description,
+                      currentManga.description,
                       style: GoogleFonts.karla(
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
-                        color: Colors.white70,
+                        color: themeColors.headingTitle!.withOpacity(0.7),
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 120), // Space for bottom bar
+                    const SizedBox(height: 120),
                   ],
                 ),
               ),
@@ -186,39 +241,35 @@ class _InfoMangaState extends State<InfoManga> {
           ],
         ),
       ),
-      // Bottom Action Bar
       bottomSheet: Container(
-        color: const Color(0xFF0F0F1A),
+        color: Theme.of(context).scaffoldBackgroundColor,
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
         child: Row(
           children: [
-            // Bookmark Button
             GestureDetector(
               onTap: () async {
-                await mangaProvider.toggleBookmark(widget.manga);
-                setState(() {});
+                await mangaProvider.toggleBookmark(currentManga);
               },
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF25253D),
+                  color: themeColors.searchBarBg,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Icon(
-                  widget.manga.isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
-                  color: widget.manga.isBookmarked ? const Color(0xFFFF7F5C) : Colors.white70,
+                  currentManga.isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                  color: currentManga.isBookmarked ? const Color(0xFFFF7F5C) : themeColors.headingTitle!.withOpacity(0.7),
                 ),
               ),
             ),
             const SizedBox(width: 15),
-            // Start Reading Button
             Expanded(
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PageManga(manga: widget.manga),
+                      builder: (context) => PageManga(manga: currentManga),
                     ),
                   );
                 },

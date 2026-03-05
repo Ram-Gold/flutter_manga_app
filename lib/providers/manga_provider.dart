@@ -15,9 +15,24 @@ class MangaProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addManga(Manga manga) async {
+    await DatabaseHelper.instance.insert(manga);
+    await fetchManga();
+  }
+
+  Future<void> updateManga(Manga manga) async {
+    await DatabaseHelper.instance.update(manga);
+    await fetchManga();
+  }
+
+  Future<void> deleteManga(int id) async {
+    await DatabaseHelper.instance.delete(id);
+    await fetchManga();
+  }
+
   Future<void> toggleBookmark(Manga manga) async {
     manga.isBookmarked = !manga.isBookmarked;
     await DatabaseHelper.instance.update(manga);
-    await fetchManga(); // Refresh both lists
+    await fetchManga();
   }
 }

@@ -16,6 +16,8 @@ dependencies:
   path: ^1.8.3
   provider: ^6.1.1
   google_fonts: ^6.1.0
+  image_picker: ^1.0.4
+  file_picker: ^8.0.3
 
 dev_dependencies:
   flutter_test:
@@ -26,7 +28,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/Umamusume_Star_Blossom.jpg
-    - assets/images/Shin_Ootaka_Homare.jpg
+    - assets/images/Idolatry.jpg
     - assets/images/Umamusume_Cinderella_Gray.jpg
     - assets/images/JJK.jpg
     - assets/images/Dandadan.jpg

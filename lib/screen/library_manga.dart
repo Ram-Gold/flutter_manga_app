@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../providers/manga_provider.dart';
+import '../providers/theme_provider.dart';
 import 'info_manga.dart';
 
 class LibraryManga extends StatefulWidget {
@@ -17,6 +19,8 @@ class _LibraryMangaState extends State<LibraryManga> {
   @override
   Widget build(BuildContext context) {
     final mangaProvider = Provider.of<MangaProvider>(context);
+    final themeColors = Theme.of(context).extension<MangaThemeColors>()!;
+    
     var bookmarkedManga = mangaProvider.bookmarkedManga;
 
     if (_selectedStatus != 'All') {
@@ -24,7 +28,6 @@ class _LibraryMangaState extends State<LibraryManga> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1A),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
@@ -36,7 +39,7 @@ class _LibraryMangaState extends State<LibraryManga> {
                 style: GoogleFonts.montserrat(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: themeColors.headingTitle,
                 ),
               ),
               const SizedBox(height: 24),
@@ -47,7 +50,7 @@ class _LibraryMangaState extends State<LibraryManga> {
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: themeColors.headingTitle,
                 ),
               ),
               const SizedBox(height: 16),
@@ -56,11 +59,8 @@ class _LibraryMangaState extends State<LibraryManga> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildCustomChip('All'),
-                    _buildCustomChip('Ongoing'),
-                    _buildCustomChip('Hiatus'),
-                    _buildCustomChip('Completed'),
-                  ],
+                    'All', 'Ongoing', 'Hiatus', 'Completed'
+                  ].map((status) => _buildCustomChip(status, themeColors)).toList(),
                 ),
               ),
               const SizedBox(height: 30),
@@ -71,13 +71,13 @@ class _LibraryMangaState extends State<LibraryManga> {
                     padding: const EdgeInsets.only(top: 80),
                     child: Column(
                       children: [
-                        Icon(Icons.bookmark_border, size: 64, color: Colors.grey.withOpacity(0.3)),
+                        Icon(Icons.bookmark_border, size: 64, color: themeColors.searchBarPlaceholder!.withOpacity(0.3)),
                         const SizedBox(height: 16),
                         Text(
                           _selectedStatus == 'All' 
                             ? 'Your library is empty' 
                             : 'No $_selectedStatus manga found', 
-                          style: GoogleFonts.karla(color: Colors.grey, fontSize: 16)
+                          style: GoogleFonts.karla(color: themeColors.searchBarPlaceholder, fontSize: 16)
                         ),
                       ],
                     ),
@@ -96,7 +96,7 @@ class _LibraryMangaState extends State<LibraryManga> {
                   ),
                   itemBuilder: (context, index) {
                     final manga = bookmarkedManga[index];
-                    return _buildMangaGridItem(context, manga);
+                    return _buildMangaGridItem(context, manga, themeColors);
                   },
                 ),
             ],
@@ -106,7 +106,7 @@ class _LibraryMangaState extends State<LibraryManga> {
     );
   }
 
-  Widget _buildCustomChip(String label) {
+  Widget _buildCustomChip(String label, MangaThemeColors colors) {
     bool isSelected = _selectedStatus == label;
     return GestureDetector(
       onTap: () {
@@ -118,7 +118,7 @@ class _LibraryMangaState extends State<LibraryManga> {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF323240) : const Color(0xFF1C1C2A),
+          color: isSelected ? const Color(0xFFFF8A71) : colors.genrePillBg,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
@@ -127,7 +127,7 @@ class _LibraryMangaState extends State<LibraryManga> {
             style: GoogleFonts.montserrat(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : const Color(0xFFA6A6BB),
+              color: isSelected ? Colors.white : colors.genrePillText,
             ),
           ),
         ),
@@ -135,7 +135,7 @@ class _LibraryMangaState extends State<LibraryManga> {
     );
   }
 
-  Widget _buildMangaGridItem(BuildContext context, dynamic manga) {
+  Widget _buildMangaGridItem(BuildContext context, dynamic manga, MangaThemeColors colors) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -152,10 +152,9 @@ class _LibraryMangaState extends State<LibraryManga> {
             aspectRatio: 2 / 3,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                manga.coverPage,
-                fit: BoxFit.cover,
-              ),
+              child: manga.coverPage.startsWith('assets/')
+                ? Image.asset(manga.coverPage, fit: BoxFit.cover)
+                : Image.file(File(manga.coverPage), fit: BoxFit.cover),
             ),
           ),
           const SizedBox(height: 8),
@@ -164,7 +163,7 @@ class _LibraryMangaState extends State<LibraryManga> {
             style: GoogleFonts.montserrat(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: colors.headingTitle,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -174,7 +173,7 @@ class _LibraryMangaState extends State<LibraryManga> {
             style: GoogleFonts.karla(
               fontSize: 13,
               fontWeight: FontWeight.w300,
-              color: const Color(0xFFA6A6BB),
+              color: colors.searchBarPlaceholder,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

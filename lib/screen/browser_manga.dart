@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../providers/manga_provider.dart';
+import '../providers/theme_provider.dart';
 import 'info_manga.dart';
 import 'main_wrapper.dart';
+import 'add_edit_manga.dart';
 
 class BrowserScreen extends StatefulWidget {
   const BrowserScreen({super.key});
@@ -18,6 +21,9 @@ class _BrowserScreenState extends State<BrowserScreen> {
   @override
   Widget build(BuildContext context) {
     final mangaProvider = Provider.of<MangaProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeColors = Theme.of(context).extension<MangaThemeColors>()!;
+    
     var mangaList = mangaProvider.allManga;
 
     if (_selectedGenre != 'All') {
@@ -27,20 +33,39 @@ class _BrowserScreenState extends State<BrowserScreen> {
     final recentlyAdded = mangaList.reversed.toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F1A),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Browse',
-                style: GoogleFonts.montserrat(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Browse',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                      color: themeColors.headingTitle,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode),
+                        onPressed: () => themeProvider.toggleTheme(),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () => Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => const AddEditMangaScreen())
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
 
@@ -58,19 +83,19 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 child: Container(
                   height: 52,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1C1C2A),
+                    color: themeColors.searchBarBg,
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Row(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Icon(Icons.search, color: Color(0xFFA6A6BB)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Icon(Icons.search, color: themeColors.searchIcon),
                       ),
                       Text(
                         'Search Manga',
                         style: GoogleFonts.karla(
-                          color: const Color(0xFFA6A6BB),
+                          color: themeColors.searchBarPlaceholder,
                           fontSize: 16,
                         ),
                       ),
@@ -85,7 +110,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: themeColors.headingTitle,
                 ),
               ),
               const SizedBox(height: 16),
@@ -96,8 +121,8 @@ class _BrowserScreenState extends State<BrowserScreen> {
                   scrollDirection: Axis.horizontal,
                   children: [
                     'All', 'Action', 'Romance', 'Sci-Fi', 'Mystery', 
-                    'Thriller', 'Supernatural', 'Comedy', 'Music'
-                  ].map((genre) => _buildCustomChip(genre)).toList(),
+                    'Thriller', 'Supernatural', 'Comedy', 'Music', 'Sports', 'Drama', 'Slice of Life', 'Adventure', 'Fantasy'
+                  ].map((genre) => _buildCustomChip(genre, themeColors)).toList(),
                 ),
               ),
               const SizedBox(height: 30),
@@ -107,7 +132,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: themeColors.headingTitle,
                 ),
               ),
               const SizedBox(height: 15),
@@ -130,7 +155,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                     itemCount: mangaList.length,
                     separatorBuilder: (context, index) => const SizedBox(width: 12),
                     itemBuilder: (context, index) {
-                      return _buildMangaItem(context, mangaList[index]);
+                      return _buildMangaItem(context, mangaList[index], themeColors);
                     },
                   ),
                 ),
@@ -142,7 +167,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: themeColors.headingTitle,
                 ),
               ),
               const SizedBox(height: 15),
@@ -165,7 +190,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
                     itemCount: recentlyAdded.length,
                     separatorBuilder: (context, index) => const SizedBox(width: 12),
                     itemBuilder: (context, index) {
-                      return _buildMangaItem(context, recentlyAdded[index]);
+                      return _buildMangaItem(context, recentlyAdded[index], themeColors);
                     },
                   ),
                 ),
@@ -176,7 +201,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
     );
   }
 
-  Widget _buildCustomChip(String label) {
+  Widget _buildCustomChip(String label, MangaThemeColors colors) {
     bool isSelected = _selectedGenre == label;
     return GestureDetector(
       onTap: () {
@@ -188,7 +213,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF323240) : const Color(0xFF1C1C2A),
+          color: isSelected ? const Color(0xFFFF8A71) : colors.genrePillBg,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
@@ -197,7 +222,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
             style: GoogleFonts.montserrat(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : const Color(0xFFA6A6BB),
+              color: isSelected ? Colors.white : colors.genrePillText,
             ),
           ),
         ),
@@ -205,7 +230,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
     );
   }
 
-  Widget _buildMangaItem(BuildContext context, dynamic manga) {
+  Widget _buildMangaItem(BuildContext context, dynamic manga, MangaThemeColors colors) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -222,12 +247,9 @@ class _BrowserScreenState extends State<BrowserScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                manga.coverPage,
-                height: 240,
-                width: 160,
-                fit: BoxFit.cover,
-              ),
+              child: manga.coverPage.startsWith('assets/') 
+                ? Image.asset(manga.coverPage, height: 240, width: 160, fit: BoxFit.cover)
+                : Image.file(File(manga.coverPage), height: 240, width: 160, fit: BoxFit.cover),
             ),
             const SizedBox(height: 8),
             Text(
@@ -235,7 +257,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
               style: GoogleFonts.montserrat(
                 fontSize: 16,
                 fontWeight: FontWeight.bold, 
-                color: Colors.white
+                color: colors.headingTitle
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -245,7 +267,7 @@ class _BrowserScreenState extends State<BrowserScreen> {
               style: GoogleFonts.karla(
                 fontSize: 13,
                 fontWeight: FontWeight.w300,
-                color: const Color(0xFFA6A6BB)
+                color: colors.searchBarPlaceholder
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

@@ -46,7 +46,7 @@ class DatabaseHelper {
     final initialManga = [
       Manga(
         title: "Umamusume Pretty Derby: Star Blossom",
-        description: "The popular cross-media content \"Uma Musume Pretty Derby\" features \"Uma Musume\" who have inherited the names and souls of numerous racehorses! A new legend begins with the indomitable horse girl \"Sakura Laurel\" as the main character.",
+        description: "The popular cross-media content Uma Musume Pretty Derby features Uma Musume who have inherited the names and souls of numerous racehorses! A new legend begins with the indomitable horse girl Sakura Laurel as the main character.",
         authors: "Monjūsaki , Cygames, Hotani Shin",
         rating: "8.99",
         favorites: "5,654",
@@ -57,13 +57,13 @@ class DatabaseHelper {
         genres: ["Action", "Sports", "Drama"],
       ),
        Manga(
-        title: "Shin Ootaka, Homare",
-        description: "Description for Shin Ootaka, Homare.",
+        title: "Idolatry",
+        description: "High school girl Junna Harumi's purpose in life is to support the idol Fuwari Tsukishiro! One day, the idol group Fuwari belongs to disbands. In her despair, Junna learns that Fuwari will be trying out for an idol audition program. There will be a total of 100 participants - in order to lead her idol to the top, Junna decides to take part in the audition herself and work behind the scenes. (Source: MangaUpdates, edited)",
         authors: "Monjūsaki , Cygames, Hotani Shin",
         rating: "8.50",
         favorites: "1,234",
         status: "Hiatus",
-        coverPage: "assets/images/Shin_Ootaka_Homare.jpg",
+        coverPage: "assets/images/Idolatry.jpg",
         chapter: "SHIN_OOTAKA.pdf",
         genres: ["Drama", "Slice of Life"],
       ),

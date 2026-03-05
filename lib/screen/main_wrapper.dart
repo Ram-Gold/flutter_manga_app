@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
 import 'browser_manga.dart';
 import 'library_manga.dart';
 import 'search_manga.dart';
@@ -28,6 +30,9 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -41,9 +46,9 @@ class _MainWrapperState extends State<MainWrapper> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
         onTap: _onTabTapped,
-        backgroundColor: const Color(0xFF0F0F1A),
-        selectedItemColor: const Color(0xFFFF8A71), // Match Start Reading button color
-        unselectedItemColor: Colors.grey,
+        backgroundColor: isDark ? const Color(0xFF0F0F1A) : const Color(0xFFF0F0F5),
+        selectedItemColor: const Color(0xFFFF8A71),
+        unselectedItemColor: isDark ? Colors.grey : const Color(0xFF666666),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const [
