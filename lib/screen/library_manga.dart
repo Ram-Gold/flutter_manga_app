@@ -33,7 +33,7 @@ class _LibraryMangaState extends State<LibraryManga> {
               const Text(
                 'Library',
                 style: TextStyle(
-                  fontSize: 34,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -44,7 +44,7 @@ class _LibraryMangaState extends State<LibraryManga> {
               const Text(
                 'Status',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -57,17 +57,29 @@ class _LibraryMangaState extends State<LibraryManga> {
                   children: [
                     _buildCustomChip('All'),
                     _buildCustomChip('Ongoing'),
+                    _buildCustomChip('Hiatus'),
                     _buildCustomChip('Completed'),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 30),
 
               if (bookmarkedManga.isEmpty)
-                const Center(
+                Center(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Text('No bookmarked manga found.', style: TextStyle(color: Colors.grey)),
+                    padding: const EdgeInsets.only(top: 80),
+                    child: Column(
+                      children: [
+                        Icon(Icons.bookmark_border, size: 64, color: Colors.grey.withOpacity(0.3)),
+                        const SizedBox(height: 16),
+                        Text(
+                          _selectedStatus == 'All' 
+                            ? 'Your library is empty' 
+                            : 'No $_selectedStatus manga found', 
+                          style: const TextStyle(color: Colors.grey, fontSize: 16)
+                        ),
+                      ],
+                    ),
                   ),
                 )
               else
@@ -78,52 +90,12 @@ class _LibraryMangaState extends State<LibraryManga> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 12,
-                    mainAxisSpacing: 18,
-                    childAspectRatio: 0.50,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 0.52, 
                   ),
                   itemBuilder: (context, index) {
                     final manga = bookmarkedManga[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InfoManga(manga: manga),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: const Color(0xFF1C1C2A),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.asset(
-                                  manga.coverPage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            manga.title,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    );
+                    return _buildMangaGridItem(context, manga);
                   },
                 ),
             ],
@@ -143,10 +115,11 @@ class _LibraryMangaState extends State<LibraryManga> {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF323240) : const Color(0xFF1C1C2A),
           borderRadius: BorderRadius.circular(20),
+          border: isSelected ? Border.all(color: Colors.orangeAccent.withOpacity(0.3)) : null,
         ),
         child: Center(
           child: Text(
@@ -157,6 +130,45 @@ class _LibraryMangaState extends State<LibraryManga> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildMangaGridItem(BuildContext context, dynamic manga) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InfoManga(manga: manga),
+          ),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AspectRatio(
+            aspectRatio: 2 / 3,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                manga.coverPage,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            manga.title,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
