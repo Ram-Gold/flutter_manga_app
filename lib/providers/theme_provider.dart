@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
+// Manages the application's visual theme by switching between light and dark modes.
 class ThemeProvider with ChangeNotifier {
   bool _isDarkMode = true;
 
   bool get isDarkMode => _isDarkMode;
 
+  // Dynamically returns the active theme data based on the current mode selection.
   ThemeData get currentTheme => _isDarkMode ? darkTheme : lightTheme;
 
+  // Swaps the theme mode and triggers a rebuild of all styled widgets.
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
     notifyListeners();
   }
 
+  // Defines the dark visual style including background, card, and text colors.
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: const Color(0xFF1E1E1E),
@@ -35,6 +39,7 @@ class ThemeProvider with ChangeNotifier {
     ],
   );
 
+  // Defines the light visual style for a clean and bright user interface.
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: Colors.white,
@@ -58,6 +63,7 @@ class ThemeProvider with ChangeNotifier {
   );
 }
 
+// Custom theme class to store specific manga-related colors not found in standard Material themes.
 class MangaThemeColors extends ThemeExtension<MangaThemeColors> {
   final Color? searchIcon;
   final Color? searchBarBg;
@@ -75,6 +81,7 @@ class MangaThemeColors extends ThemeExtension<MangaThemeColors> {
     this.headingTitle,
   });
 
+  // Creates a copy of the theme colors while allowing specific overrides.
   @override
   ThemeExtension<MangaThemeColors> copyWith({
     Color? searchIcon,
@@ -94,6 +101,7 @@ class MangaThemeColors extends ThemeExtension<MangaThemeColors> {
     );
   }
 
+  // Smoothly interpolates between two sets of theme colors during transitions.
   @override
   ThemeExtension<MangaThemeColors> lerp(ThemeExtension<MangaThemeColors>? other, double t) {
     if (other is! MangaThemeColors) return this;

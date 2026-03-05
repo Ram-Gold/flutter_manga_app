@@ -2,18 +2,21 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/manga.dart';
 
+// Manages the SQLite database connection and provides methods for database operations.
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
 
   DatabaseHelper._init();
 
+  // Returns the existing database or initializes a new one if it doesn't exist.
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB('manga.db');
     return _database!;
   }
 
+  // Locates the database file on the device and opens the connection.
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
@@ -26,6 +29,7 @@ class DatabaseHelper {
     );
   }
 
+  // Handles database schema updates when the version number changes.
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 10) {
       await db.execute('DROP TABLE IF EXISTS manga');
@@ -33,6 +37,7 @@ class DatabaseHelper {
     }
   }
 
+  // Defines the manga table structure and populates it with initial sample data.
   Future _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE manga (
@@ -137,23 +142,27 @@ class DatabaseHelper {
     }
   }
 
+  // Inserts a new manga record into the database table.
   Future<int> insert(Manga manga) async {
     final db = await instance.database;
     return await db.insert('manga', manga.toMap());
   }
 
+  // Retrieves all manga entries stored in the database.
   Future<List<Manga>> getAllManga() async {
     final db = await instance.database;
     final result = await db.query('manga');
     return result.map((json) => Manga.fromMap(json)).toList();
   }
 
+  // Retrieves only the manga records that are marked as bookmarked.
   Future<List<Manga>> getBookmarkedManga() async {
     final db = await instance.database;
     final result = await db.query('manga', where: 'isBookmarked = ?', whereArgs: [1]);
     return result.map((json) => Manga.fromMap(json)).toList();
   }
 
+  // Searches the database for manga titles that match the search query.
   Future<List<Manga>> searchManga(String query) async {
     final db = await instance.database;
     final result = await db.query(
@@ -164,6 +173,7 @@ class DatabaseHelper {
     return result.map((json) => Manga.fromMap(json)).toList();
   }
 
+  // Updates an existing manga record in the database.
   Future<int> update(Manga manga) async {
     final db = await instance.database;
     return await db.update(
@@ -174,6 +184,7 @@ class DatabaseHelper {
     );
   }
 
+  // Deletes a specific manga entry from the database by its ID.
   Future<int> delete(int id) async {
     final db = await instance.database;
     return await db.delete(

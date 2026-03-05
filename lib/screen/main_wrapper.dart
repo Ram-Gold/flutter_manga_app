@@ -5,6 +5,7 @@ import 'browser_manga.dart';
 import 'library_manga.dart';
 import 'search_manga.dart';
 
+// Serves as the main layout container and manages navigation between the primary screens.
 class MainWrapper extends StatefulWidget {
   final int initialIndex;
   const MainWrapper({super.key, this.initialIndex = 0});
@@ -22,6 +23,7 @@ class _MainWrapperState extends State<MainWrapper> {
     _selectedIndex = widget.initialIndex;
   }
 
+  // Updates the active tab index when a bottom navigation icon is tapped.
   void _onTabTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -34,6 +36,7 @@ class _MainWrapperState extends State<MainWrapper> {
     final isDark = themeProvider.isDarkMode;
 
     return Scaffold(
+      // Uses IndexedStack to preserve the scroll state of each tab when switching views.
       body: IndexedStack(
         index: _selectedIndex,
         children: const [
@@ -42,6 +45,7 @@ class _MainWrapperState extends State<MainWrapper> {
           SearchManga(),
         ],
       ),
+      // Provides a persistent navigation bar at the bottom for easy access to main features.
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
